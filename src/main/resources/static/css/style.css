@@ -1,3 +1,8 @@
+:root {
+    --pico-answer-background: rgba(0, 0, 255, 0.1);
+    --pico-question-background: rgba(0, 255, 0, 0.1);
+}
+
 html {
     --font-size: 95%;
 }
@@ -14,19 +19,30 @@ body {
     flex-direction: column;
     flex: 1;
     padding: 1rem;
+    overflow-y: auto; /* Allow chat container to scroll */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.container::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera*/
 }
 
 #chat-container {
     flex: 1;
-    overflow-y: auto;
     margin-bottom: 1rem;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column; /* Changed from column-reverse */
 }
 
 form {
     display: flex;
     align-items: center;
+    position: sticky;
+    bottom: 0;
+    background-color: var(--pico-background-color);
+    padding: 1rem;
+    margin: 0 -1rem -1rem -1rem; /* Compensate for container padding */
 }
 
 input[type="text"] {
@@ -39,13 +55,32 @@ form button {
 }
 
 .chat-response {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem; /* Reduced from 1rem */
     width: fit-content;
     padding: 1rem;
     border-radius: 0.5rem;
+    background-color: var(--pico-answer-background);
+    white-space: pre-wrap;
 }
 
 .user-question {
     align-self: flex-end;
-    background-color: var(--pico-muted-background-color);
+    background-color: var(--pico-question-background);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    .chat-response {
+        max-width: 85%;
+        width: auto;
+    }
+
+    form {
+        margin: 0;
+        padding: 0.5rem;
+        border-top: 1px solid var(--pico-muted-border-color);
+    }
 }
