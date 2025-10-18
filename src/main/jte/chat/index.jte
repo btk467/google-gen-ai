@@ -13,15 +13,13 @@
     <link rel="stylesheet" href="/webjars/pico/css/pico.min.css"/>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/webjars/htmx.org/dist/htmx.min.js"></script>
-    <script src="/webjars/htmx.org/dist/ext/sse.js"></script>
     <script src="/js/app.js"></script>
 </head>
 <body>
 <main class="container">
-    <div hx-ext="sse" sse-connect="/chat/sse">
-        <div id="chat-container" sse-swap="message" hx-swap-oob="true"></div>
+    <div id="chat-container">
     </div>
-    <form hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend" @submit="this.reset()">
+    <form hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend">
         <input type="text" name="message" placeholder="Enter your message">
         <button type="submit">Send</button>
     </form>
