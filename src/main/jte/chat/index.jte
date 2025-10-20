@@ -13,17 +13,19 @@
     <link rel="stylesheet" href="css/pico.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/htmx.min.js"></script>
-    <script src="js/htmx-ext-sse.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body>
 <main class="container">
     <div id="chat-container">
     </div>
-    <form hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend">
-        <input type="text" name="message" placeholder="Enter your message">
+    <form id="chat-form" hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend" hx-indicator="#send-button">
+        <input type="text" name="message" placeholder="Enter your message" required>
         <div>
-            <button type="submit">Send</button>
+            <button id="send-button" type="submit">
+                <span class="button-text">Send</span>
+                <span class="spinner" style="display: none;"></span>
+            </button>
         </div>
     </form>
 </main>

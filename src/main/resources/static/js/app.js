@@ -15,3 +15,4 @@ htmx.on('htmx:afterSwap', function(evt) {
         chatInput.focus();
     }
 });
+

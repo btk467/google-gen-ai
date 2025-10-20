@@ -54,6 +54,28 @@ input[type="text"] {
     margin-left: 1rem;
 }
 
+.spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#send-button.htmx-request .button-text {
+    display: none;
+}
+
+#send-button.htmx-request .spinner {
+    display: inline-block;
+}
+
 .chat-response {
     margin-bottom: 0.75rem; /* A touch bigger */
     width: fit-content;
@@ -63,13 +85,19 @@ input[type="text"] {
     white-space: pre-wrap;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .chat-response:not(.user-question) {
-    animation: fadeIn 1.0s ease-in-out;
+    animation: slideIn 1.0s ease-in-out;
 }
 
 
