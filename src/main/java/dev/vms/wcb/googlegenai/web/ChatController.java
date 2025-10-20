@@ -2,8 +2,12 @@ package dev.vms.wcb.googlegenai.web;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +38,17 @@ public class ChatController {
 			
 	private final ChatClient chatClient;
     private final TemplateEngine jteTemplateEngine;
-
+    private final ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+    
+    
 	public ChatController(ChatClient.Builder builder, TemplateEngine jteTemplateEngine) {
-		this.chatClient = builder.build();
+		this.chatClient = builder
+				.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory)
+						.conversationId(UUID.randomUUID().toString())
+						.order(0)
+						.build())
+				.build();
+		
         this.jteTemplateEngine = jteTemplateEngine;
 	}
 
