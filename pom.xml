@@ -56,24 +56,6 @@
       <artifactId>spring-ai-google-genai</artifactId>
       <version>${spring-ai.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.webjars.bowergithub.picocss/pico -->
-    <dependency>
-        <groupId>org.webjars.bowergithub.picocss</groupId>
-        <artifactId>pico</artifactId>
-        <version>1.5.6</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.webjars.npm/htmx.org -->
-    <dependency>
-        <groupId>org.webjars.npm</groupId>
-        <artifactId>htmx.org</artifactId>
-        <version>2.0.7</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
-    <dependency>
-        <groupId>org.webjars</groupId>
-        <artifactId>webjars-locator</artifactId>
-        <version>0.52</version>
-    </dependency>    
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -84,6 +66,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 
@@ -110,6 +101,26 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

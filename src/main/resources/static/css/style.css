@@ -50,12 +50,12 @@ input[type="text"] {
     margin-right: 1rem;
 }
 
-form button {
-    width: auto;
+#chat-form div {
+    margin-left: 1rem;
 }
 
 .chat-response {
-    margin-bottom: 0.5rem; /* Reduced from 1rem */
+    margin-bottom: 0.75rem; /* A touch bigger */
     width: fit-content;
     padding: 1rem;
     border-radius: 0.5rem;
@@ -81,6 +81,10 @@ form button {
     form {
         margin: 0;
         padding: 0.5rem;
-        border-top: 1px solid var(--pico-muted-border-color);
+        border-top: 1px solid var(--pico-border-color);
+    }
+
+    html {
+        font-size: 90%;
     }
 }
