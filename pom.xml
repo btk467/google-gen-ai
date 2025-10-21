@@ -26,11 +26,13 @@
 		<tag/>
 		<url/>
 	</scm>
+	
 	<properties>
 		<java.version>21</java.version>
 		<spring-ai.version>1.1.0-M3</spring-ai.version>
 		<jte.version>3.2.1</jte.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,7 +58,26 @@
       <artifactId>spring-ai-google-genai</artifactId>
       <version>${spring-ai.version}</version>
     </dependency>
-		<dependency>
+    
+    <dependency>
+        <groupId>org.springframework.ai</groupId>
+        <artifactId>spring-ai-pinecone-store</artifactId>
+        <version>${spring-ai.version}</version>
+    </dependency>
+ <!-- Apache POI for DOCX -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.4.1</version>
+    </dependency>
+
+    <!-- PDFBox for PDF text extraction -->
+    <dependency>
+        <groupId>org.apache.pdfbox</groupId>
+        <artifactId>pdfbox</artifactId>
+        <version>3.0.6</version>
+    </dependency>    
+    <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
