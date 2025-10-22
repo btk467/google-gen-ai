@@ -1,6 +1,4 @@
-@import gg.jte.html.HtmlContent
-
-@param HtmlContent content
+@param String agentName
 
 <!doctype html>
 <html lang="en">
@@ -18,7 +16,7 @@
 <body>
 <main class="container">
     <div id="chat-container">
-        <div class="chat-response">Welcome! I am AI assistant. How can I help you today?</div>
+        <div class="chat-response">Welcome! I am ${agentName}. How can I help you today?</div>
     </div>
     <form id="chat-form" hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend">
         <input type="text" id="chat-input" name="message" placeholder="Enter your message" required>

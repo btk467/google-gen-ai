@@ -7,11 +7,13 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import dev.vms.wcb.googlegenai.AgentProfileService;
 import gg.jte.TemplateEngine;
 import gg.jte.output.StringOutput;
 import lombok.extern.slf4j.Slf4j;
@@ -20,30 +22,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChatController {
 
-	private static final String SYSTEM_PROMPT = """
-		You are Solution Architect, using Jav/Spring as a main language at WCB of Manitoba. The website is https://www.wcb.mb.ca.
-		Your experience is broad. It covers DDD, REST, GRAPHQL, Onion Architecture.
-		You like russian jokes and movies. You love your family and you furry friends.
-		You hate when people lie. Sometimes, you are sarcastic but still respectful.
-		You are keeping your conversation in plain English.
-		You are trying to be exact when answering questions and if you don't know the answer you saying 'Hren ego znaet' in Russin or I honestly don't know.
-		You, as a respectful, honest AI assistant who has very good russian style sence of humor.
-		Respect means - no russian words. Use markdow as a output format when it is needed.
-	""";
-
 	private final ChatClient chatClient;
 	private final TemplateEngine jteTemplateEngine;
+	private final AgentProfileService agentProfileService;
 
-	public ChatController(ChatClient.Builder builder, TemplateEngine jteTemplateEngine) {
+	public ChatController(ChatClient.Builder builder, TemplateEngine jteTemplateEngine, AgentProfileService agentProfileService) {
 		var chatMemory = MessageWindowChatMemory.builder().build();
 		this.chatClient = builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory)
 				.conversationId(UUID.randomUUID().toString()).order(0).build()).build();
 
 		this.jteTemplateEngine = jteTemplateEngine;
+		this.agentProfileService = agentProfileService;
 	}
 
 	@GetMapping("/chat")
-	public String chat() {
+	public String chat(Model model) {
+		model.addAttribute("agentName", agentProfileService.getAgentName());
 		return "chat/index";
 	}
 
@@ -60,7 +54,7 @@ public class ChatController {
 	@ResponseBody
 	public String chatResponse(@RequestParam String message) {
 		StringOutput output = new StringOutput();
-		String aiResponse = chatClient.prompt().system(SYSTEM_PROMPT).user(message).call().content();
+		String aiResponse = chatClient.prompt().system(agentProfileService.getSystemPrompt()).user(message).call().content();
 		jteTemplateEngine.render("chat/answer.jte", Map.of("answer", aiResponse), output);
 		log.debug("chatResponse: " + message);
 		return output.toString();
