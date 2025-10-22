@@ -18,8 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 1rem;
-    overflow-y: auto; /* Allow chat container to scroll */
+    overflow-y: auto;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
@@ -30,9 +29,10 @@ body {
 
 #chat-container {
     flex: 1;
-    margin-bottom: 1rem;
     display: flex;
-    flex-direction: column; /* Changed from column-reverse */
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 form {
@@ -42,7 +42,7 @@ form {
     bottom: 0;
     background-color: var(--pico-background-color);
     padding: 1rem;
-    margin: 0 -1rem -1rem -1rem; /* Compensate for container padding */
+    z-index: 1;
 }
 
 input[type="text"] {
@@ -108,8 +108,8 @@ input[type="text"] {
 }
 
 @media (max-width: 768px) {
-    .container {
-        padding: 0.5rem;
+    #chat-container {
+        padding: 0.5rem 0.5rem 0.5rem 0.5rem;
     }
 
     .chat-response {
@@ -118,9 +118,7 @@ input[type="text"] {
     }
 
     form {
-        margin: 0;
         padding: 0.5rem;
-        border-top: 1px solid var(--pico-border-color);
     }
 
     html {

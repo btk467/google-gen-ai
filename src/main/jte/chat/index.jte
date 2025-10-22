@@ -18,16 +18,14 @@
 <body>
 <main class="container">
     <div id="chat-container">
+        <div class="chat-response">Welcome! I am AI assistant. How can I help you today?</div>
     </div>
-    <form id="chat-form" hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend" hx-indicator="#send-button">
-        <input type="text" name="message" placeholder="Enter your message" required>
-        <div>
-            <button id="send-button" type="submit">
-                <span class="button-text">Send</span>
-                <span class="spinner" style="display: none;"></span>
-            </button>
-        </div>
-    </form>
+    <form id="chat-form" hx-post="/chat" hx-target="#chat-container" hx-swap="beforeend">
+        <input type="text" id="chat-input" name="message" placeholder="Enter your message" required>
+       <div>
+            <button id="send-button" type="submit">Send</button>
+        </div>    
+		</form>
 </main>
 </body>
 </html>
