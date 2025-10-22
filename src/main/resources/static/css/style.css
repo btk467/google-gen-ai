@@ -32,7 +32,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    padding: 1rem;
 }
 
 form {
@@ -77,12 +77,24 @@ input[type="text"] {
 }
 
 .chat-response {
+    position: relative;
     margin-bottom: 0.75rem; /* A touch bigger */
     width: fit-content;
     padding: 1rem;
     border-radius: 0.5rem;
     background-color: var(--pico-answer-background);
     white-space: pre-wrap;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--pico-primary);
 }
 
 @keyframes slideIn {
@@ -109,7 +121,7 @@ input[type="text"] {
 
 @media (max-width: 768px) {
     #chat-container {
-        padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+        padding: 0.5rem;
     }
 
     .chat-response {

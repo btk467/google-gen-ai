@@ -16,3 +16,14 @@ htmx.on('htmx:afterSwap', function(evt) {
     }
 });
 
+function copyToClipboard(button) {
+  const article = button.parentElement;
+  const textToCopy = article.querySelector('div').innerText;
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    button.innerText = 'Copied!';
+    setTimeout(() => {
+      button.innerText = 'Copy';
+    }, 2000);
+  });
+}
+
