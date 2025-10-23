@@ -38,10 +38,8 @@ body {
 form {
     display: flex;
     align-items: center;
-    position: sticky;
     bottom: 0;
     background-color: var(--pico-background-color);
-    padding: 1rem;
     z-index: 1;
 }
 

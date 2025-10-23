@@ -9,7 +9,9 @@ htmx.on('htmx:afterSwap', function(evt) {
     if (container) {
         container.scrollTop = container.scrollHeight;
     }
+});
 
+htmx.on('htmx:afterSettle', function(evt) {
     const chatInput = document.getElementById('chat-input');
     if (chatInput) {
         chatInput.focus();
