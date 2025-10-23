@@ -27,7 +27,8 @@ public class ChatController {
 
 	private static final String USER_NOT_TELLING_HIS_NAME_GENERATE_ONE_FUNNY_NAME = """
 		Attention!!! If the user does not introduce himself then you should respond with short funny but respectful greeting and ask him
-		for permission to call him by the name you make. That name should be funny but respectful. Otherwise, continue conversation.
+		for permission to call him by the name you make. That name should be funny but respectful. 
+		Otherwise, continue conversation.
 	""";
 
 	private final ChatClient chatClient;
