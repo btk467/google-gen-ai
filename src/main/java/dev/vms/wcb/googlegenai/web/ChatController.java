@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+
 import dev.vms.wcb.googlegenai.AgentProfileService;
 import gg.jte.TemplateEngine;
 import gg.jte.output.StringOutput;
@@ -37,6 +40,7 @@ public class ChatController {
 
 	@GetMapping("/chat")
 	public String chat(Model model) {
+		log.debug("Agent: " + agentProfileService.getAgentName());
 		model.addAttribute("agentName", agentProfileService.getAgentName());
 		return "chat/index";
 	}
@@ -56,7 +60,16 @@ public class ChatController {
 		StringOutput output = new StringOutput();
 		String aiResponse = chatClient.prompt().system(agentProfileService.getSystemPrompt()).user(message).call().content();
 		jteTemplateEngine.render("chat/answer.jte", Map.of("answer", aiResponse), output);
-		log.debug("chatResponse: " + message);
+		return output.toString();
+	}
+
+	@ExceptionHandler(Exception.class)
+	@ResponseBody
+	public String handleError(Exception ex, WebRequest request) {
+		log.error("Error during chat response", ex);
+		String message = request.getParameter("message");
+		StringOutput output = new StringOutput();
+		jteTemplateEngine.render("chat/error.jte", Map.of("question", message), output);
 		return output.toString();
 	}
 }

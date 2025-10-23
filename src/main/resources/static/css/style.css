@@ -1,6 +1,7 @@
 :root {
     --pico-answer-background: rgba(0, 0, 255, 0.1);
     --pico-question-background: rgba(0, 255, 0, 0.1);
+    --pico-error-background: rgba(255, 0, 0, 0.1);
 }
 
 html {
@@ -115,6 +116,10 @@ input[type="text"] {
 .user-question {
     align-self: flex-end;
     background-color: var(--pico-question-background);
+}
+
+.error-response {
+    background-color: var(--pico-error-background);
 }
 
 @media (max-width: 768px) {
