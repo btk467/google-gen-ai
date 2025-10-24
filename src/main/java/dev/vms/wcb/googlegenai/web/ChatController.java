@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.api.BaseAdvisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,12 +75,27 @@ public class ChatController {
 				.prompt()
 				.system(USER_NOT_TELLING_HIS_NAME_GENERATE_ONE_FUNNY_NAME 
 						+ agentProfileService.getSystemPrompt())
+				.advisors(getChatMemoryAdvisor(session))
 				.user(message).call()
 				.content();
 		jteTemplateEngine.render("chat/answer.jte", Map.of("answer", aiResponse), output);
 		return output.toString();
 	}
 
+	private BaseAdvisor getChatMemoryAdvisor(HttpSession session) {
+		var userChat =  (BaseAdvisor) session.getAttribute("userChatSession");
+		if (userChat == null) {
+			var messageWindowChatMemory = MessageWindowChatMemory.builder().build();
+			userChat = MessageChatMemoryAdvisor.builder(messageWindowChatMemory)
+			.conversationId(UUID.randomUUID().toString())
+			.order(0)
+			.build();					
+			session.setAttribute("userChatSession", userChat);
+		}
+			
+		return userChat;
+	}
+	
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public String handleError(Exception ex, WebRequest request) {
@@ -89,6 +105,4 @@ public class ChatController {
 		jteTemplateEngine.render("chat/error.jte", Map.of("question", message), output);
 		return output.toString();
 	}
-	
-	record ChatUserSession(String chatUserName, ChatClient chatClient ) {};
 }
