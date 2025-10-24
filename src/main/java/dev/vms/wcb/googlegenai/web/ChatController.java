@@ -1,5 +1,7 @@
 package dev.vms.wcb.googlegenai.web;
 
+import static java.lang.String.format;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -7,6 +9,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.BaseAdvisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,8 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChatController {
 
-	private static final String USER_NOT_TELLING_HIS_NAME_GENERATE_ONE_FUNNY_NAME = """
-		Attention!!! If the user does not introduce himself then you should respond with short funny but respectful greeting and ask him
+	private static final String SYSTEM_PROMPT = """
+		Here are agent profile details: %s
+		Attention!!! If the user does not introduce himself or give you the name matching agent profile name %s then 
+		you should respond with short funny but respectful greeting and ask him
 		for permission to call him by the name you make. That name should be funny but respectful. 
 		Otherwise, continue conversation.
 	""";
@@ -52,8 +58,9 @@ public class ChatController {
 	}
 
 	@GetMapping("/chat")
-	public String chat(Model model) {
+	public String chat(Model model, HttpSession session) {
 		log.debug("Agent: " + agentProfileService.getAgentName());
+		getChatMemoryAdvisor(session);
 		model.addAttribute("agentName", agentProfileService.getAgentName());
 		return "chat/index";
 	}
@@ -73,8 +80,7 @@ public class ChatController {
 		StringOutput output = new StringOutput();
 		String aiResponse = this.chatClient
 				.prompt()
-				.system(USER_NOT_TELLING_HIS_NAME_GENERATE_ONE_FUNNY_NAME 
-						+ agentProfileService.getSystemPrompt())
+				.system(format(SYSTEM_PROMPT, agentProfileService.getAgentName(), agentProfileService.getSystemPrompt()))
 				.advisors(getChatMemoryAdvisor(session))
 				.user(message).call()
 				.content();
@@ -85,11 +91,16 @@ public class ChatController {
 	private BaseAdvisor getChatMemoryAdvisor(HttpSession session) {
 		var userChat =  (BaseAdvisor) session.getAttribute("userChatSession");
 		if (userChat == null) {
+			String conversationId = UUID.randomUUID().toString();
 			var messageWindowChatMemory = MessageWindowChatMemory.builder().build();
 			userChat = MessageChatMemoryAdvisor.builder(messageWindowChatMemory)
-			.conversationId(UUID.randomUUID().toString())
-			.order(0)
-			.build();					
+				.conversationId(conversationId)
+				.order(0)
+				.build();
+
+			Message message = new UserMessage("New user connected, which should introduce himself");
+			messageWindowChatMemory.add(conversationId, message);
+
 			session.setAttribute("userChatSession", userChat);
 		}
 			
